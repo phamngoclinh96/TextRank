@@ -7,6 +7,7 @@ from dataset_fetcher import ListToMatrixConverter
 import matplotlib.pyplot as plt
 import matplotlib.patches as mp
 import time
+import networkx
 
 debug = False
 
@@ -110,6 +111,18 @@ class HITS():
         """Returns the screen name of each user
         """
         return self.__names
+
+    def plot(self,x,names,c):
+        if self.__is_sparse:
+            matrix = (self.__link_matrix[0:self.__size, 0:self.__size]).toarray().tolist()
+        else:
+            matrix = (self.__link_matrix[0:self.__size, 0:self.__size]).tolist()
+        g = networkx.Graph()
+        for i in range(self.__size):
+            for j in range(self.__size):
+                if matrix[i][j] != 0:
+                    g.add_edge(names[i],names[j],weight=matrix[i][j])
+        networkx.draw_networkx(g)
 
     def plot_graph(self, x, names, c):
         """Plots the graph
@@ -246,7 +259,9 @@ def main():
     users = r.read_users(users_path)
     index_id_map = r.read_map(map_path)
     link_matrix = r.read_link_matrix(link_matrix_path, is_sparse=sparse)
-
+    print(users)
+    print(index_id_map)
+    print(link_matrix)
     # Run the algorithm
     h = HITS(link_matrix, users, index_id_map, is_sparse=sparse)
     h.calc_scores(epsilon=epsilon)
@@ -264,7 +279,7 @@ def main():
         h.plot_graph(h.get_auths(), h.get_names(), 1)
 
     # Print graphs
-    h.plot_stats()
+    # h.plot_stats()
 
 
 if __name__ == '__main__':
