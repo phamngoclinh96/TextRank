@@ -208,3 +208,5 @@ if __name__ == '__main__':
     print(state)
     state = pageRank(G)
     print(state)
+    np.divide([0],[])
+    
