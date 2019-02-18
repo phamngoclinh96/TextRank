@@ -120,3 +120,4 @@ nytprof.out
 # Visualizations files
 textrank/views/sentences.gexf  
 textrank/views/words.gexf
+*checkpoint.ipynb
